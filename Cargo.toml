@@ -11,3 +11,6 @@ serde_json = "1.0.145"
 uuid = { version = "1.19.0", features = ["serde", "v7"] }
 actix-web = "4"
 dotenvy = "0.15.7"
+lz4 = "1.28.1"
+ciborium = "0.2.2"
+sha2 = "0.10.9"

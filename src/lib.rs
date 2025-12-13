@@ -3,6 +3,7 @@ pub mod broker;
 pub mod error;
 pub mod models;
 pub mod handlers;
+pub mod utils;
 
 
 pub use db::init::init_database;
