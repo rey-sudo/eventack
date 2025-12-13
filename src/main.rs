@@ -1,43 +1,28 @@
-//use uuid::Uuid;
-//use serde_json::json;
-use dotenv::dotenv;
-use std::env;
+use actix_web::{App, HttpServer};
+use sqlx::PgPool;
 use eventack::init_database;
-
+use eventack::create_event;
 
 #[tokio::main]
-async fn main() -> Result<(), sqlx::Error> {
-    dotenv().ok();
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenv::dotenv().ok();
 
-    let database_url = env::var("DATABASE_URL")
-            .expect("DATABASE_URL must be set");
+    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     
     init_database(&database_url).await?;
 
-    println!("✅ Database eventack y tabla events listas");
-    
+    let pool = PgPool::connect(&database_url)
+        .await
+        .expect("Failed to connect to DB");
+
+    HttpServer::new(move || {
+        App::new()
+            .app_data(actix_web::web::Data::new(pool.clone()))
+            .service(create_event)
+    })
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await?;
 
     Ok(())
 }
-
-
-
-
-/* 
-    let event = Event {
-        event_id: Uuid::now_v7(),  // ← UUID v7
-        topic: "user.registered".to_string(),
-        payload: json!({
-            "user_id": 42,
-            "email": "user@example.com"
-        }),
-    };
-
-    let inserted = save_event_tx(&pool, &event).await?;
-
-    if inserted {
-        println!("Evento insertado (commit OK)");
-    } else {
-        println!("Evento duplicado — idempotencia funcionando");
-    }
-*/

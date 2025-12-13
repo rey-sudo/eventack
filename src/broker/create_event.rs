@@ -40,3 +40,23 @@ pub async fn save_event_tx(pool: &PgPool, event: &Event) -> Result<bool, sqlx::E
 
     Ok(inserted)
 }
+
+
+/* 
+    let event = Event {
+        event_id: Uuid::now_v7(),  // ← UUID v7
+        topic: "user.registered".to_string(),
+        payload: json!({
+            "user_id": 42,
+            "email": "user@example.com"
+        }),
+    };
+
+    let inserted = save_event_tx(&pool, &event).await?;
+
+    if inserted {
+        println!("Evento insertado (commit OK)");
+    } else {
+        println!("Evento duplicado — idempotencia funcionando");
+    }
+*/

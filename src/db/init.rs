@@ -22,5 +22,7 @@ pub async fn init_database(database_url: &str) -> Result<(), sqlx::Error> {
     .execute(&pool)
     .await?;
 
+    println!("✅ Database eventack y tabla events listas");
+
     Ok(())
 }
