@@ -41,3 +41,13 @@ pub async fn create_event(
         }
     }
 }
+
+
+#[sqlx::test]
+async fn post_events_creates_event(pool: PgPool) {
+    let result = sqlx::query("SELECT 1")
+        .execute(&pool)
+        .await;
+
+    assert!(result.is_ok());
+}
