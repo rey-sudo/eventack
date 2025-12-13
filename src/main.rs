@@ -2,10 +2,11 @@ use actix_web::{App, HttpServer};
 use sqlx::PgPool;
 use eventack::init_database;
 use eventack::create_event;
+use std::path::Path;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    dotenv::dotenv().ok();
+    dotenvy::from_path(Path::new(".env.dev"))?;
 
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     
