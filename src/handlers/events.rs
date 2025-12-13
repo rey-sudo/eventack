@@ -8,6 +8,8 @@ use crate::models::event::Event;
 use crate::utils::event::{serialize_event};
 use crate::models::event::SerializedEvent;
 
+
+/// Http POST handler that creates a new event. The event content (payload) is serialized with binary CBOR, compressed with LZ4, and hashed with SHA256.
 #[post("/events")]
 pub async fn create_event(
     pool: web::Data<PgPool>,
@@ -23,7 +25,7 @@ pub async fn create_event(
     let event: Event = Event {
         user_id: req.user_id.clone(),
         action: req.action.clone(),
-        value: req.value,
+        value: req.value, //Copy
     };
 
     let serialized: SerializedEvent = match serialize_event(&event) {
